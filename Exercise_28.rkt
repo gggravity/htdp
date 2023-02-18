@@ -1,5 +1,5 @@
-;; Collect all definitions and change them so that all magic numbers are refactored into
-;; constant definitions.
+;; Determine the potential profit for these ticket prices: $1, $2, $3,
+;; $4, and $5. Which price maximizes the profit of the movie theater? Determinethe best ticket price to a dime.
 
 (require 2htdp/batch-io)
 

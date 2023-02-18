@@ -19,3 +19,6 @@
 
 (underlay (circle 60 "solid" "yellow")
 	 (square 40 "solid" "orange"))
+
+(define x 0)
+(if (= x 0) 0 (/ 1 x))

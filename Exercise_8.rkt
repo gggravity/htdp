@@ -7,4 +7,4 @@
 	  "tall")))
 
 
-  (tall_or_wide cat)
+(tall_or_wide cat)

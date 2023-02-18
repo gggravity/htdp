@@ -1,0 +1,13 @@
+(require 2htdp/image)
+(require 2htdp/universe)
+
+
+(define (picture-of-circle.v2 height)
+  (cond
+    [(<= height (- (img-h 5) 1))
+     (place-image (circle 5 "solid" "green") 50 height
+               (empty-scene 100 100))]
+    [(> height (- (img-h 5) 1)) 
+     (place-image (circle 5 "solid" "green") 50 (- (img-h 5) 1)
+               (empty-scene 100 100))]
+     ))

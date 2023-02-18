@@ -24,7 +24,20 @@
   (- (revenue ticket-price)
      (cost ticket-price)))
 
-(for ([i (in-range 1 4 0.01)])
-  (write-file 'stdout (string-append (number->string i) ": " (number->string (profit i)) "\n")))
+;; (for ([i (in-range 1 4 0.01)])
+;;   (write-file 'stdout (string-append (number->string i) ": " (number->string (profit i)) "\n")))
 
 ;; 2.92
+
+(define (profit2 price)
+  (- (* (+ 120
+	 (* (/ 15 0.1)
+	    (- 5.0 price)))
+	price)
+     (+ 180
+	(* 0.04
+	   (+ 120
+	      (* (/ 15 0.1)
+		 (- 5.0 price)))))))
+
+(= (profit 5) (profit2 5))

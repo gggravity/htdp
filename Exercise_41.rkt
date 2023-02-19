@@ -31,7 +31,6 @@
   (rectangle (*  WHEEL-RADIUS 7) (*  WHEEL-RADIUS 7) "solid" "transparent"))
 (define BOTH-WHEELS
   (beside WHEEL SPACE WHEEL))
-
 (define CAR
   (overlay/xy
    (rectangle (/ (image-width BOTH-WHEELS) 4)

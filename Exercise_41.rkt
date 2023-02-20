@@ -1,5 +1,4 @@
-;; Develop your favorite image of an automobile so that WHEEL-RADIUS remains
-;; the single point of control.
+;; Exercise 41
 
 (require 2htdp/image)
 (require 2htdp/universe)

@@ -1,8 +1,9 @@
-;; Exercise 41
+;; Exercise 42
 
 (require 2htdp/image)
 (require 2htdp/universe)
 (require test-engine/racket-tests)
+
 
 ;; dimensions of the scene
 (define WIDTH-OF-WORLD 800)
@@ -32,6 +33,12 @@
 			  (/ (image-height BOTH-WHEELS) 2)
 			  "solid" "seagreen") 0 0 BOTH-WHEELS)))
 
+;; definition for the tree
+(define TREE
+  (underlay/xy (circle 10 "solid" "green")
+	       9 15
+	       (rectangle 2 20 "solid" "brown")))
+
 ;; x and y coordinates for the placement of the tree in the scene
 (define TREE-X (- (image-width CAR) WIDTH-OF-WORLD))
 (define TREE-Y (- (/ (image-height CAR) 2) HEIGHT-OF-WORLD))
@@ -40,7 +47,7 @@
 ;; The vertical offset of the car.
 (define Y-CAR 50)
 
-;; WorldState -> WorldState
+;; WorldState -> WorldStateh
 ;; moves the car by 3 pixels for every clock tick
 
 (check-expect (tock 20) 23)
@@ -55,10 +62,13 @@
 (define (render ws)
   (place-image CAR ws Y-CAR (overlay/xy TREE TREE-X TREE-Y BACKGROUND)))
 
+
+(define (END-STATE ws)  (>= ws (- WIDTH-OF-WORLD (/ (image-width CAR) 2))))
+
 ;; WorldState -> Boolean
 ;; after each event, big-bang evaluates (end? ws)
 (define (end? ws)
-  (>= ws (- WIDTH-OF-WORLD (/ (image-width CAR) 2))))
+ (END-STATE ws))
 
 ;; WorldState -> WorldState
 ;; launches the program from some initial state

@@ -1,4 +1,4 @@
-;; Exercise 45
+;; Exercise 46
 
 (require 2htdp/image)
 (require 2htdp/universe)
@@ -12,8 +12,9 @@
 ;; the background of the scene 
 (define BACKGROUND (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD "transparent"))
 
-;; location of the cat bitmap
+;; location of the cat bitmaps
 (define cat1 (bitmap "images/cat1.png"))
+(define cat2 (bitmap "images/cat2.png"))
 
 
 ;; The vertical offset of the car.
@@ -34,9 +35,8 @@
 ;; according to the given world state
 
 (define (render ws)
-  (if (= (modulo ws 2) 0)
-      (place-image (rotate (random 4) cat1) ws  CAT-Y BACKGROUND)
-      (place-image (rotate (- (random 4)) cat1) ws CAT-Y BACKGROUND)))
+  (cond [(odd? ws) (place-image (rotate 1 cat1) ws  CAT-Y BACKGROUND)]
+	[else (place-image (rotate -1 cat2) ws CAT-Y BACKGROUND)]))
 
 ;; WorldState -> WorldState
 ;; launches the program from some initial state

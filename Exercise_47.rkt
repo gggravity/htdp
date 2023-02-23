@@ -4,7 +4,6 @@
 (require 2htdp/universe)
 (require test-engine/racket-tests)
 
-
 ;; dimensions of the scene
 (define WIDTH 100)
 (define HEIGHT 20)

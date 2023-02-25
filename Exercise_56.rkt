@@ -2,8 +2,8 @@
 (require 2htdp/universe)
 (require test-engine/racket-tests)
 
-(define HEIGHT 300) ; distances in pixels
-(define WIDTH 100)
+(define HEIGHT 100) ; distances in pixels
+(define WIDTH 30)
 (define YDELTA 3)
 (define BACKG (empty-scene WIDTH HEIGHT))
 (define ROCKET (rectangle 5 30 "solid" "red"))
@@ -11,7 +11,7 @@
 
 (define (p-image x)
   (cond
-   [(string? x) (place-image ROCKET 10 (- 0 CENTER) BACKG)]
+   [(and (string? x) (string=? "resting" x)) (place-image ROCKET 10 (- 0 CENTER) BACKG)]
    [else (place-image ROCKET 10 (- x CENTER) BACKG)]))
 
 (define (p-image-text x)
@@ -19,7 +19,7 @@
 
 (define (show x)
   (cond
-   [(string? x) (p-image x)]
+   [(and (string? x) (string=? "resting" x)) (p-image x)]
    [(<= -3 x -1) (p-image-text x)]
    [(>= x 0) (p-image x)]))
 
@@ -28,7 +28,6 @@
    [(string? x) (if (string=? " " ke) -3 x)]
    [(<= -3 x -1) x]
    [(>= x 0) x]))
-
 
 ;; LRCD -> LRCD
 ;; raises the rocket by YDELTA if it is moving already 
@@ -42,15 +41,27 @@
 
 (define (fly x)
   (cond
-   [(string? x) x]
+   [(and (string? x) (string=? "resting" x)) x]
    [(<= -3 x -1) (if (= x -1) HEIGHT (+ x 1))]
    [(>= x 0) (- x YDELTA)]))
+
+;; WorldState -> Boolean
+;; after each event, big-bang evaluates (end? ws)
+(define (end? ws)
+  (cond
+   [(and (string? ws) (string=? "resting" ws))  #f]
+   [(= ws 1) #t]
+   [else #f]
+   ))
+
+(* 3 30)
 
 ;; LRCD -> LRCD
 (define (main s)
   (big-bang s
-	    [on-tick fly 0.3]
+	    [on-tick fly 0.1]
 	    [to-draw show]
-	    [on-key launch]))
+	    [on-key launch]
+	    [stop-when end?]))
 
 (main "resting")

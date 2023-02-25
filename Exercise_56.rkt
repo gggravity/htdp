@@ -51,10 +51,7 @@
   (cond
    [(and (string? ws) (string=? "resting" ws))  #f]
    [(= ws 1) #t]
-   [else #f]
-   ))
-
-(* 3 30)
+   [else #f]))
 
 ;; LRCD -> LRCD
 (define (main s)

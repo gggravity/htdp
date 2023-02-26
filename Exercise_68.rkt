@@ -22,3 +22,4 @@
 ;; the same interpretation as ball1.
 
 (make-ballf 30 40 -10 5)
+(vel-deltax (ball-velocity ball1))

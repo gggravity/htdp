@@ -98,6 +98,8 @@
   (cond [(key=? ke "left") (move-left ed)]
         [(key=? ke "right") (move-right ed)]
         [(key=? ke "\b") (delete-char ed)]
+        [(key=? ke "\t") ed]
+        [(key=? ke "\r") ed]
         [else ed]))
 
 (define (main ed)

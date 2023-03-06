@@ -94,12 +94,19 @@
       (editor-post ed))]
     [else ed]))
 
+(define (add-char ed ke)
+  (make-editor
+   (string-append (editor-pre ed) ke)
+   (editor-post ed)))
+
+
 (define (edit ed ke)
   (cond [(key=? ke "left") (move-left ed)]
         [(key=? ke "right") (move-right ed)]
         [(key=? ke "\b") (delete-char ed)]
         [(key=? ke "\t") ed]
         [(key=? ke "\r") ed]
+        [(= (string-length ke) 1) (add-char ed ke)]
         [else ed]))
 
 (define (run ed)
@@ -110,11 +117,4 @@
 
 (define ed (make-editor "hello " "world"))
 
-
 (run ed)
-
-;; (move-left ed)
-
-
-
-;; (string-remove-last (editor-pre ed))

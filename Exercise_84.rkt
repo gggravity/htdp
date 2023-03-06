@@ -71,19 +71,28 @@
   (text-image ed))
 
 (define (move-left ed)
-  (make-editor
-   (string-remove-last (editor-pre ed))
-   (string-append (string-last (editor-pre ed)) (editor-post ed))))
+  (cond
+    [(> (string-length (editor-pre ed)) 0)
+     (make-editor
+      (string-remove-last (editor-pre ed))
+      (string-append (string-last (editor-pre ed)) (editor-post ed)))]
+    [else ed]))
 
 (define (move-right ed)
-  (make-editor
-   (string-append (editor-pre ed)(string-first (editor-post ed)))
-   (string-rest (editor-post ed))))
+  (cond
+    [(> (string-length (editor-post ed)) 0)
+     (make-editor
+      (string-append (editor-pre ed)(string-first (editor-post ed)))
+      (string-rest (editor-post ed)))]
+    [else ed]))
 
 (define (delete-char ed)
-  (make-editor
-   (string-remove-last (editor-pre ed))
-   (editor-post ed)))
+  (cond
+    [(> (string-length (editor-pre ed)) 0)
+     (make-editor
+      (string-remove-last (editor-pre ed))
+      (editor-post ed))]
+    [else ed]))
 
 (define (edit ed ke)
   (cond [(key=? ke "left") (move-left ed)]

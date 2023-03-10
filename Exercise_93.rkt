@@ -4,64 +4,87 @@
 
 (require 2htdp/image)
 (require 2htdp/universe)
+(require test-engine/racket-tests)
 
-;; the world state or the game state.
-(define-struct world-state [x-pos y-pos]) ;; not the real state, just some random variables for now.
+(define-struct chameleon [x-pos happy color])
 
 ;; dimensions of the scene
-(define WIDTH 800)
-(define HEIGHT 600)
+(define WIDTH 1000)
+(define HEIGHT 400)
 
-;; how the ufo should look like
-(define UFO (overlay (circle 10 "solid" "orange") (ellipse 40 7 "outline" "green")))
+;; the speed of the cat
+(define cham-speed 5)
 
-;; how the tank should look like
-(define TANK (rectangle 100 30 "solid" "darkgreen"))
+;; location of the cat bitmap
+(define cham-image (bitmap "images/chameleon.png"))
 
-;; how the missile should look like
-(define MISSILE (rectangle 5 20 "solid" "black"))
-  
+(define (cham-background color)
+  (rectangle (image-width cham-image)
+             (image-height cham-image)
+             "solid"
+             color))
+
+;; define happines
+(define (happines cham)
+  (rectangle (* 10 ( chameleon-happy cham)) (/ HEIGHT 2) "solid" "yellow"))
+
 ;; the background of the scene 
-(define BACKGROUND (empty-scene WIDTH HEIGHT "lightblue"))
+;; (define BACKGROUND (empty-scene WIDTH HEIGHT "transparent"))
+(define BACKGROUND
+  (beside (empty-scene (/ WIDTH 3) HEIGHT "green")
+          (empty-scene (/ WIDTH 3) HEIGHT "white")
+          (empty-scene (/ WIDTH 3) HEIGHT "red")))
 
-;; what to change on every tick
-(define(tock state)
-  state)
+(define(tock cham)
+  (cond
+    [(and (> (chameleon-happy cham) 0) (< (chameleon-x-pos cham) WIDTH))
+     (make-chameleon (+ (chameleon-x-pos cham) cham-speed)
+                     (- (chameleon-happy cham) 0.5)
+                     (chameleon-color cham))]
+    [(and (> (chameleon-happy cham) 0) (>= (chameleon-x-pos cham) WIDTH))
+     (make-chameleon 0
+                     (- (chameleon-happy cham) 0.5)
+                     (chameleon-color cham))]
+    [else cham]))
 
-;; the scene to render
-(define (render ws)
-  (place-image TANK (/ WIDTH 2) HEIGHT
-               (place-image MISSILE  (/ WIDTH 2) (+ (world-state-x-pos ws) (/ HEIGHT 2))
-                            (place-image UFO (/ WIDTH 2) 0 BACKGROUND)
-                            )))
+(define (render cham)
+  (place-image
+   (overlay cham-image (cham-background(chameleon-color cham))) (chameleon-x-pos cham) (* HEIGHT 0.75)
+   (place-image/align (happines cham) 0 0 "left" "top" BACKGROUND)))
 
-;; function to move the tank left
-(define (move-left ws)
-  ws)
+(define (feed cham)
+  (cond
+    [(>=  (chameleon-happy cham) 100) cham]
+    [else (make-chameleon (chameleon-x-pos cham)
+                          (+ (chameleon-happy cham) 25)
+                          (chameleon-color cham))]))
 
-;; function to move the tank right
-(define (move-right ws)
-  ws)
+(define (red cham)
+  (make-chameleon (chameleon-x-pos cham)
+                  (chameleon-happy cham)
+                  "red"))
 
-;; function to fire a missile from the tank
-(define (fire-missile ws)
-  (make-world-state
-   (- (world-state-x-pos ws) 1)
-   (world-state-y-pos ws)))
+(define (green cham)
+  (make-chameleon (chameleon-x-pos cham)
+                  (chameleon-happy cham)
+                  "green"))
 
-;; What function to run on difference key presses
-(define (key-pressed ws ke)
-  (cond [(key=? ke "left") (move-left ws)]
-        [(key=? ke "right") (move-right ws)]
-        [(key=? ke " ") (fire-missile ws)]
-        [else ws]))
+(define (blue cham)
+  (make-chameleon (chameleon-x-pos cham)
+                  (chameleon-happy cham)
+                  "blue"))
 
-;; the main loop of the program
-(define (main world-state)
-  (big-bang world-state
+(define (attention cham ke)
+  (cond [(key=? ke "down") (feed cham)]
+        [(key=? ke "r") (red cham)]
+        [(key=? ke "g") (green cham)]
+        [(key=? ke "b") (blue cham)]
+        [else cham]))
+
+(define (main cham)
+  (big-bang cham
 	    [on-tick tock]
 	    [to-draw render]
-	    [on-key key-pressed]))
+	    [on-key attention]))
 
-;; run the main loop
-(main (make-world-state 0 0))
+(main (make-chameleon 0 100 "green"))

@@ -53,6 +53,7 @@
 (define AIM1 (make-aim (make-posn 20 10)
                        (make-tank 28 -3)))
 
+
 ;; the state after a missile have been fired.
 (define-struct fired[ufo tank missile])
 
@@ -67,6 +68,9 @@
 (define FIRED3 (make-fired (make-posn 100 100)
                            (make-tank 100 3)
                            (make-posn 22 201)))
+
+(define START (make-aim (make-posn (/ WIDTH 2) 0)
+                        (make-tank (/ WIDTH 2) HEIGHT)))
 
 ;; Missile Image -> Image
 ;; adds m to the given image img
@@ -97,14 +101,6 @@
                   (missile-render (fired-missile s)
                                   BACKGROUND)))]))
 
-;; function to move the tank left
-(define (move-left ws)
-  ws)
-
-;; function to move the tank right
-(define (move-right ws)
-  ws)
-
 ;; check if the ufo have landed
 (define (ufo-landed? ufo)
   (>= (posn-y ufo) HEIGHT))
@@ -114,11 +110,11 @@
 (check-expect (ufo-landed? (make-posn 0 (+ HEIGHT 100))) #true)
 
 (define (ufo-hit? ufo missile)
-(and
- (> (+ (posn-y ufo) (image-height UFO)) (posn-y missile))
- (and
-  (< (- (posn-x ufo) half-ufo-width) (posn-x missile))
-  (> (+ (posn-x ufo) half-ufo-width) (posn-x missile)))))
+  (and
+   (> (+ (posn-y ufo) (image-height UFO)) (posn-y missile))
+   (and
+    (< (- (posn-x ufo) half-ufo-width) (posn-x missile))
+    (> (+ (posn-x ufo) half-ufo-width) (posn-x missile)))))
 
 ;; the game over function
 (define (si-game-over? ws)
@@ -129,46 +125,78 @@
                      )]
     [else #false]))
 
+;; how the ufo moves
 (define (move-ufo ufo)
-  (make-posn (posn-x ufo) (+ (posn-y ufo) speed)))
+  (make-posn ( + (posn-x ufo)
+                 (* (if (= (random 2) 0) -1 1)
+                 (random 10))
+                 )
+             (+ (posn-y ufo) speed)))
 
-(define (move-tank tank)
-  (make-tank (+ (tank-loc tank) speed) (tank-vel tank)))
-
+;; how the missile moves
 (define (move-missile missile)
   (make-posn (posn-x missile) (- (posn-y missile) speed)))
 
+;; function defining how the objects move at every tick.
 (define (si-move ws)
   (cond
-    [(aim? ws) (make-aim (move-ufo (aim-ufo ws)) (move-tank (aim-tank ws)))]
+    [(aim? ws) (make-aim (move-ufo (aim-ufo ws)) (aim-tank ws))]
     [(fired? ws) (make-fired (move-ufo (fired-ufo ws))
-                             (move-tank (fired-tank ws))
+                             (fired-tank ws)
                              (move-missile (fired-missile ws))
                              )]
     [else ws]))
 
-;; function to fire a missile from the tank
-(define (fire-missile ws)
- ws)
-
-;; What function to run on difference key presses
-(define (key-pressed ws ke)
-  (cond [(key=? ke "left") (move-left ws)]
-        [(key=? ke "right") (move-right ws)]
+;; function to control the keyevents
+(define (si-control ws ke)
+  (cond [(key=? ke "left") (move ws "-")]
+        [(key=? ke "right") (move ws "+")]
         [(key=? ke " ") (fire-missile ws)]
         [else ws]))
+
+;; function to move the tank left or right
+(define (move ws dir)
+  (cond
+    [(aim? ws) (make-aim (aim-ufo ws)
+                         (make-tank
+                          (cond
+                            [(eq? dir "-")
+                             (- (tank-loc (aim-tank ws)) 10)]
+                            [else (+ (tank-loc (aim-tank ws)) 10)])
+                          (tank-vel (aim-tank ws)))
+                         )] ; ufo tank
+    [(fired? ws) (make-fired (fired-ufo ws)
+                             (make-tank
+                              (cond
+                                [(eq? dir "-")
+                                 (- (tank-loc (fired-tank ws)) 10)]
+                                [else (+ (tank-loc (fired-tank ws)) 10)])
+                              (tank-vel (fired-tank ws)))
+                             (fired-missile ws))]
+    [else ws]))
+
+;; function to fire a missile from the tank
+(define (fire-missile ws)
+  (cond
+    [(aim? ws)
+     (make-fired (aim-ufo ws)
+                 (aim-tank ws)
+                 (make-posn (tank-loc (aim-tank ws)) HEIGHT)
+                 )]
+    [else ws]))
 
 ;; the main loop of the program
 (define (main world-state)
   (big-bang world-state
 	    [on-tick si-move]
 	    [to-draw si-render]
-	    [on-key key-pressed]
+	    [on-key si-control]
             [stop-when si-game-over?]
             ))
 
 ;; run the main loop
+(main START)
 ;; (main AIM1)
 ;; (main FIRED1)
-(main FIRED2)
+;; (main FIRED2)
 ;; (main FIRED3)

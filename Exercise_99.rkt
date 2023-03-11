@@ -53,6 +53,7 @@
 (define AIM1 (make-aim (make-posn 20 10)
                        (make-tank 28 -3)))
 
+
 ;; the state after a missile have been fired.
 (define-struct fired[ufo tank missile])
 
@@ -67,6 +68,7 @@
 (define FIRED3 (make-fired (make-posn 100 100)
                            (make-tank 100 3)
                            (make-posn 22 201)))
+
 
 ;; Missile Image -> Image
 ;; adds m to the given image img

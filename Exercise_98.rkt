@@ -28,8 +28,13 @@
 (define WIDTH 800)
 (define HEIGHT 600)
 
+;; the speed of the game
+(define speed 3)
+
 ;; how the ufo should look like
 (define UFO (overlay (circle 10 "solid" "orange") (ellipse 40 7 "outline" "green")))
+
+(define half-ufo-width (/ (image-width UFO) 2))
 
 ;; how the tank should look like
 (define TANK-HEIGHT 30)
@@ -56,13 +61,14 @@
                            (make-tank 28 -3)
                            (make-posn 28 (- HEIGHT TANK-HEIGHT))))
 
-(define FIRED2 (make-fired (make-posn 20 100)
+(define FIRED2 (make-fired (make-posn 40 100)
+                           (make-tank 100 3)
+                           (make-posn 30 201)))
+
+(define FIRED3 (make-fired (make-posn 100 100)
                            (make-tank 100 3)
                            (make-posn 22 201)))
 
-;; what to change on every tick
-(define(tock state)
-  state)
 
 ;; Missile Image -> Image
 ;; adds m to the given image img
@@ -110,12 +116,11 @@
 (check-expect (ufo-landed? (make-posn 0 (+ HEIGHT 100))) #true)
 
 (define (ufo-hit? ufo missile)
-  (and (eq? (posn-x ufo) (posn-x missile))
-       (eq? (posn-y ufo) (posn-y missile))))
-
-(check-expect (ufo-hit? (make-posn 0 0) (make-posn 0 0)) #true)
-(check-expect (ufo-hit? (make-posn 10 0) (make-posn 10 1)) #false)
-(check-expect (ufo-hit? (make-posn 1 10) (make-posn 1 11)) #false)
+(and
+ (> (+ (posn-y ufo) (image-height UFO)) (posn-y missile))
+ (and
+  (< (- (posn-x ufo) half-ufo-width) (posn-x missile))
+  (> (+ (posn-x ufo) half-ufo-width) (posn-x missile)))))
 
 ;; the game over function
 (define (si-game-over? ws)
@@ -125,6 +130,24 @@
                      (ufo-hit? (fired-ufo ws) (fired-missile ws))
                      )]
     [else #false]))
+
+(define (move-ufo ufo)
+  (make-posn (posn-x ufo) (+ (posn-y ufo) speed)))
+
+(define (move-tank tank)
+  (make-tank (+ (tank-loc tank) speed) (tank-vel tank)))
+
+(define (move-missile missile)
+  (make-posn (posn-x missile) (- (posn-y missile) speed)))
+
+(define (si-move ws)
+  (cond
+    [(aim? ws) (make-aim (move-ufo (aim-ufo ws)) (move-tank (aim-tank ws)))]
+    [(fired? ws) (make-fired (move-ufo (fired-ufo ws))
+                             (move-tank (fired-tank ws))
+                             (move-missile (fired-missile ws))
+                             )]
+    [else ws]))
 
 ;; function to fire a missile from the tank
 (define (fire-missile ws)
@@ -140,7 +163,7 @@
 ;; the main loop of the program
 (define (main world-state)
   (big-bang world-state
-	    [on-tick tock]
+	    [on-tick si-move]
 	    [to-draw si-render]
 	    [on-key key-pressed]
             [stop-when si-game-over?]
@@ -149,4 +172,5 @@
 ;; run the main loop
 ;; (main AIM1)
 ;; (main FIRED1)
-;; (main FIRED2)
+(main FIRED2)
+;; (main FIRED3)

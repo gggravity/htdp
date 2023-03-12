@@ -19,3 +19,15 @@
 (define ARMADILLO (make-armadillo 6 6 6 6))
 
 
+(define (fits? animal cage-size)
+  (<=  (cond
+         [(spider? animal) (spider-transport-space animal)]
+         [(elephant? animal) (elephant-transport-space animal)]
+         [(boa-constrictor? animal) (boa-constrictor-transport-space animal)]
+         [(armadillo? animal) (armadillo-transport-space animal)])
+       cage-size))
+
+(check-expect (fits? SPIDER 10) #true)
+(check-expect (fits? ELEPHANT 10) #false)
+(check-expect (fits? BOA-CONSTRICTOR 10) #false)
+(check-expect (fits? ARMADILLO 10) #true)

@@ -36,8 +36,8 @@
 ;; define happines
 (define (happines animals)
   (above/align "left"
-   (rectangle (* 10 (chameleon-happy (animals-chameleon animals))) 20 "solid" "lightred")
-   (rectangle (* 10 (cat-happy (animals-cat animals))) 20 "solid" "red")))
+               (rectangle (* 10 (chameleon-happy (animals-chameleon animals))) 20 "solid" "lightred")
+               (rectangle (* 10 (cat-happy (animals-cat animals))) 20 "solid" "red")))
 
 ;; the background of the scene 
 (define BACKGROUND (empty-scene WIDTH HEIGHT "transparent"))
@@ -141,13 +141,13 @@
     [else animals]))
 
 (define (pet animals)
-   (cond
-     [(> (cat-happy (animals-cat animals)) 100) animals]
-     [else 
-       (make-animals
-        (make-cat (cat-x-pos (animals-cat animals)) (+ (cat-happy (animals-cat animals)) 10))
-        (animals-chameleon animals)
-        (animals-current-animal animals))]))
+  (cond
+    [(> (cat-happy (animals-cat animals)) 100) animals]
+    [else 
+     (make-animals
+      (make-cat (cat-x-pos (animals-cat animals)) (+ (cat-happy (animals-cat animals)) 10))
+      (animals-chameleon animals)
+      (animals-current-animal animals))]))
 
 (define (toggle animals)
   (cond

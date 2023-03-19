@@ -57,7 +57,7 @@
     [(eq? (world-state-color state) "RED")
      (place-image/align red-light 0 0 "left" "top" BACKGROUND)]
     [(world-state-countdown state)
-     (place-image/align (display-countdown (world-state-cnt state)) 0 0 "left" "top" BACKGROUND)]
+     (place-image/align (display-countdown (world-state-cnt state)) 15 10 "left" "top" BACKGROUND)]
     [(eq? (world-state-color state) "GREEN")
      (place-image/align green-light 0 0 "left" "top" BACKGROUND)]))
 

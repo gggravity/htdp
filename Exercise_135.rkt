@@ -9,3 +9,11 @@
     [else (contains-flatt? (rest alon))]))
 
 (contains-flatt? (cons "Flatt" (cons "C" '())))
+
+(contains-flatt? (cons "A" (cons "Flatt" (cons "C" '()))))
+
+(contains-flatt? (cons "B" (cons "C" '())))
+
+(contains-flatt? (cons "A" (cons "B" (cons "C" '()))))
+
+

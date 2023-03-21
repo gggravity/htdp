@@ -15,5 +15,3 @@
 (contains-flatt? (cons "B" (cons "C" '())))
 
 (contains-flatt? (cons "A" (cons "B" (cons "C" '()))))
-
-

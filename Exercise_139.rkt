@@ -2,7 +2,6 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname ex063) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 
-
 ;; a Lost-of-amounts is on of:
 ;; --- '()
 ;; --- (cons Number List-of-amounts)
@@ -25,7 +24,6 @@
     [(cons? l) (and (>= (first l) 0) (pos? (rest l)))]
     [else #false]))
 
-
 (check-expect (pos? '() ) #true)
 
 (check-expect (pos? (cons 5 '()) ) #true)
@@ -42,13 +40,7 @@
 
 (check-expect (pos? (cons 3 (cons 4 (cons 9 (cons 3 (cons 2 (cons 1 '() ))))))) #true)
 
-
 (define ERROR-MESSAGE "List need all positive numbers")
-
-(define-struct vec [x y])
-;; A vec is
-;;   (make-vec PositiveNumber PositiveNumber)
-;; interpretation represents a velocity vector
 
 (define (checked-sum l)
   (cond

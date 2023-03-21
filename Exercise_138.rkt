@@ -5,7 +5,7 @@
 
 ;; a Lost-of-amounts is on of:
 ;; --- '()
-;; --- (cons PositiveNumber List-of-a,ounts)
+;; --- (cons PositiveNumber List-of-amounts)
 (define (sum l)
   (cond
     [(empty? l) 0]

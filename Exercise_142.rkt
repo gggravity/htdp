@@ -20,14 +20,6 @@
 ;; ImageOrFalse is one of:
 ;; --- Image
 ;; --- #false
-;; (define (ill-sized? loi n)
-;;   (cond
-;;     [(empty? loi) #false]
-;;     [else
-;;      (if (check-image (first loi) n)
-;;          (ill-sized? (rest loi) n)
-;;          (first loi))]
-;;     ))
 (define (ill-sized? loi n)
   (if
    (empty? loi)

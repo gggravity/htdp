@@ -13,7 +13,6 @@
 
 (define 1x1 (empty-scene 1 1))
 
-
 (define (check-image img n)
   (not (= (image-height img) (image-width img) n)))
 

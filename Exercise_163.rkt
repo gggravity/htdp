@@ -4,12 +4,12 @@
 
 
 ;; Number -> Number
-;; computes the wage for h hours of work
+;; convert a F degree into a C degree
 (define (f-to-c degree)
   (* (- degree 32) 5/9))
 
 ;; List-of-numbers -> List-of-numbers
-;; computes the weekly wages for teh weekly hours
+;; convert a list of F degrees into a list C degrees
 (define (convertFC degrees)
   (cond
     [(empty? degrees) '()]

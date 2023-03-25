@@ -28,3 +28,16 @@
 (check-expect (colors "red") "red")
 (check-expect (colors (make-layer "yellow" (make-layer "green" "red"))) "yellow, green, red")
 
+
+;; RD -> Color
+;; print the colors of the inner russian doll
+(define (inner an-rd)
+  (cond
+    [(string? an-rd) an-rd]
+    [else (inner (layer-doll an-rd))]))
+
+(check-expect (inner "red") "red")
+(check-expect (inner (make-layer "yellow" (make-layer "green" "red"))) "red")
+(check-expect (inner (make-layer "blue" (make-layer "yellow" (make-layer "green" "red")))) "red")
+
+

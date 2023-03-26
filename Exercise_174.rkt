@@ -29,7 +29,7 @@
 (check-expect (encode-letter "\t") (string-append "00" (code1 "\t")))
 (check-expect (encode-letter "a") (string-append "0" (code1 "a")))
 
-(define (encode word) ;; need to process the letters
+(define (encode word)
   (if (empty? word) '() 
       (cons (encode-letter (first word))
             (encode (rest word) ))))
@@ -53,7 +53,6 @@
               (merge (encode (explode (read-file filename))))
               ))
   
-
 (process-file "ttt-org.txt")
 
 

@@ -19,6 +19,8 @@
 
 (define (encode-letter s)
   (cond
+    [(string=? s " ") " "]
+    [(string=? s "\n") "\n"]
     [(>= (string->int s) 100) (code1 s)]
     [(< (string->int s) 10) (string-append "00" (code1 s))]
     [(< (string->int s) 100) (string-append "0" (code1 s))]))
@@ -27,51 +29,31 @@
 (check-expect (encode-letter "\t") (string-append "00" (code1 "\t")))
 (check-expect (encode-letter "a") (string-append "0" (code1 "a")))
 
-(define (encode-word word) ;; need to process the letters
+(define (encode word) ;; need to process the letters
   (if (empty? word) '() 
-      (cons (encode-letter (substring (implode word) 0 1))
-            (encode-word (explode (substring (implode word) 1))))
-      ))
-
-(check-expect (encode-word word1) (cons "112" (cons "097" (cons "108" (cons "101" '())))))
-
-(define (encode-line line)
-  (if (empty? line) '() 
-      (cons (encode-word (explode (first line))) (encode-line (rest line)))))
-
-(check-expect (encode-line line1)
-              (cons
-               (cons "112" (cons "097" (cons "108" (cons "101" '()))))
-               (cons
-                (cons "098" (cons "108" (cons "117" (cons "101" '()))))
-                (cons
-                 (cons "100" (cons "111" (cons "116" '()))) '()))))
-
-(define (encode-file f)
-  (cond
-    [(empty? f) '()]
-    [else (cons (encode-line (first f)) (encode-file (rest f)))]))
-
-(define (collapse-line line)
-  (cond
-    [(empty? line) ""]
-    [(empty? (rest line)) (first line)]
-    [else (string-append (first line) " " (collapse-line (rest line)))]))
-
-(define (collapse-lol lol)
-  (cond
-    [(empty? lol) ""]
-    [else (string-append (collapse-line (first lol)) "\n" (collapse-lol (rest lol)))]))
+      (cons (encode-letter (first word))
+            (encode (rest word) ))))
 
 (define (new-filename filename)
   (string-append "encoded-" filename))
 
+(define (print-list lol)
+  (cond
+    [(empty? lol) ""]
+    [else (cons (first lol) (print-list (rest lol)))]))
+
+(define (merge l)
+  (cond
+    [(empty? l) ""]
+    [else (string-append (first l) "" (merge (rest l)))]))
+
+
 (define (process-file filename)
   (write-file (new-filename filename)
-              (encode-file (read-words/line filename))
+              (merge (encode (explode (read-file filename))))
               ))
+  
 
-;; (process-file "ttt-org.txt")
+(process-file "ttt-org.txt")
 
-(encode-file (read-words/line "ttt-org.txt"))
 

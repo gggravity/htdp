@@ -15,8 +15,7 @@
   (make-phone 281 (phone-switch p) (phone-four p)))
 
 ;; List-of-phones -> List-of-phones
-;; produce is list of posn with posns with x values not between 0 and 100
-;; and y values not between 0 an 200 removed
+;; produce is lisst-of-phones with area code 713 replaced with 281
 (define (replace l)
   (cond
     [(empty? l) '()]

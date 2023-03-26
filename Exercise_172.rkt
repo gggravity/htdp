@@ -31,3 +31,4 @@
 
 (write-file "ttt.dat" (collapse-lol (read-words/line "ttt.txt")))
 
+

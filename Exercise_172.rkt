@@ -2,6 +2,8 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname ex063) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 
+(require 2htdp/batch-io)
+
 (define line1 (cons "hello" (cons "world" '())))
 (define line2 (cons "pale" (cons "blue" (cons "dot" '()))))
 
@@ -20,11 +22,12 @@
 
 (define (collapse-lol lol)
   (cond
-    [(empty? lol) '()]
-    [else (cons (collapse-line (first lol)) (collapse-lol (rest lol)))]))
+    [(empty? lol) ""]
+    [else (string-append (collapse-line (first lol)) "\n" (collapse-lol (rest lol)))]))
 
-(check-expect (collapse-lol '()) '())
-(check-expect (collapse-lol lol1) (cons "hello world" (cons "pale blue dot" '())))
-(check-expect (collapse-lol lol2) (cons "pale blue dot" (cons "hello world" '())))
+(check-expect (collapse-lol '()) "")
+(check-expect (collapse-lol lol1) "hello world\npale blue dot\n")
+(check-expect (collapse-lol lol2) "pale blue dot\nhello world\n")
 
+(write-file "ttt.dat" (collapse-lol (read-words/line "ttt.txt")))
 

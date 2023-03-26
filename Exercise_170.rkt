@@ -15,8 +15,8 @@
   (make-phone 281 (phone-switch p) (phone-four p)))
 
 ;; List-of-phones -> List-of-phones
-;; produce is list of posn with with only positions with
-;; x values between 0 and 100 and y values between 0 an 200
+;; produce is list of posn with posns with x values not between 0 and 100
+;; and y values not between 0 an 200 removed
 (define (replace l)
   (cond
     [(empty? l) '()]

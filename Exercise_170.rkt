@@ -15,7 +15,7 @@
   (make-phone 281 (phone-switch p) (phone-four p)))
 
 ;; List-of-phones -> List-of-phones
-;; produce is lisst-of-phones with area code 713 replaced with 281
+;; produce is list-of-phones with area code 713 replaced with 281
 (define (replace l)
   (cond
     [(empty? l) '()]

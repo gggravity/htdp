@@ -4,9 +4,6 @@
 
 (require 2htdp/batch-io)
 
-(define line1 (cons "pale" (cons "blue" (cons "dot" '()))))
-(define word1 (cons "p" (cons "a" (cons "l" (cons "e" '())))))
-
 ;; 1String -> String
 ;; converts the given 1String into a String
 (define (code1 c)

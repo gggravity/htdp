@@ -46,4 +46,3 @@
   ))
 
 (check-expect (transpose mat1) tam1)
-

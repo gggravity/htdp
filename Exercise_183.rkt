@@ -7,8 +7,7 @@
               (list "a" 0 #false))
 
 (check-expect (list (cons 1 (cons 13 '())))
-              (list (list 1 13))
-              )
+              (list (list 1 13)))
 
 (check-expect (cons (list 1 (list 13 '())) '())
               (list (list 1 (list 13 (list)))))

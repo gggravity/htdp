@@ -9,7 +9,7 @@
 ;; A Four is a Number between 1000 and 9999.
 
 (define (test p)
-  (if (eq? (phone-area p) 713) #true #false))
+  (eq? (phone-area p) 713))
 
 (define (change p)
   (make-phone 281 (phone-switch p) (phone-four p)))
@@ -20,10 +20,9 @@
   (cond
     [(empty? l) '()]
     [else
-       (if (test (first l))
-           (cons (change (first l)) (replace (rest l)))
-           (cons (first l) (replace (rest l)))
-           )]))
+     (if (test (first l))
+         (cons (change (first l)) (replace (rest l)))
+         (cons (first l) (replace (rest l))))]))
 
 (check-expect (replace '()) '())
 

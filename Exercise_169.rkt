@@ -3,10 +3,9 @@
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname ex063) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 
 (define (test p)
-  (if (and
-       (and (positive? (posn-x p)) (<= (posn-x p) 100))
-       (and (positive? (posn-y p)) (<= (posn-y p) 200))
-       ) #true #false))
+  (and
+   (and (positive? (posn-x p)) (<= (posn-x p) 100))
+   (and (positive? (posn-y p)) (<= (posn-y p) 200))))
 
 ;; List-of-phones -> List-of-phones
 ;; produce is list of posn with posns with x values not between 0 and 100

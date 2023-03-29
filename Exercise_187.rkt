@@ -9,10 +9,7 @@
 ;; scored a maximum of s points
 
 (define (gp>= gp1 gp2)
-  (cond
-    [(>= (gp-score gp1) (gp-score gp2)) #true]
-    [else #false]
-    ))
+ (>= (gp-score gp1) (gp-score gp2)))
 
 ;; List-of-gp -> List-of-gp
 ;; produces a sorted version of l

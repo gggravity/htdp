@@ -94,5 +94,5 @@
     [(= n (first alon)) #true]
     [else (search n (rest alon))]))
 
-(search-sorted 2 (list 1 2 3 4 5s 6))
+(search-sorted 2 (list 1 2 3 4 5 6))
 

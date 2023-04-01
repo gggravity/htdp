@@ -26,5 +26,5 @@
       ))
 
 (check-expect (total-time (list track1 track2)) 150)
-
 (check-expect (total-time itunes-tracks) 23900585)
+

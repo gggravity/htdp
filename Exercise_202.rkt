@@ -93,3 +93,14 @@
                     "Born Standing Up: A Comic's Life (Unabridged)"
                     "Tech News Today"
                     "Breaking Bad, Season 1"))
+
+
+(define (select-album album-title lot)
+  (if (empty? lot) (list)
+      (if (string=? (track-album (first lot)) album-title)
+          (cons (track-name (first lot)) (select-album album-title (rest lot)))
+          (select-album album-title (rest lot))
+          )))
+
+(check-expect (select-album "Feed The Animals" itunes-tracks)
+              (list "Play Your Part (Pt. 1)" "Shut The Club Down"))

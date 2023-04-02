@@ -43,6 +43,9 @@
 (define (create-play# d)
   (list "play#" d))
 
+(define (create-is-movie b)
+  (list "is-movie" b))
+
 (define TRACK1
   (list
    (create-name "Cry me a river")
@@ -51,6 +54,7 @@
    (create-time 123456)
    (create-year 2020)
    (create-play# (create-date 2020 12 01 01 01 01))
+   (create-is-movie #false)
    ))
 
 (define TRACK2
@@ -61,6 +65,7 @@
    (create-time 654321)
    (create-year 2000)
    (create-play# (create-date 2010 10 10 01 01 01))
+   (create-is-movie #true)
    ))
 
 (define LIST-OF-TRACKS (list TRACK1 TRACK2))
@@ -87,3 +92,25 @@
 
 (check-expect (total-time/list list-tracks) 53266664)
 
+(define (find-boolean l)
+  (if (empty? l) (list)
+      (if (boolean? (second (first l)))
+          (first l)
+          (find-boolean (rest l)))
+      ))
+
+(check-expect (find-boolean (first LIST-OF-TRACKS)) (list "is-movie" #false))
+(check-expect (find-boolean (second LIST-OF-TRACKS)) (list "is-movie" #true))
+(check-expect (find-boolean (list)) (list))
+
+
+(define (boolean-attributes l)
+  (if (empty? l) (list)
+      (cons (find-boolean (first l)) (boolean-attributes (rest l)))
+      ))
+
+(check-expect (boolean-attributes LIST-OF-TRACKS)
+              (list (list "is-movie" #false)
+                    (list "is-movie" #true)))
+
+(boolean-attributes list-tracks)

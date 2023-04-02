@@ -94,6 +94,35 @@
                                           (arrangements (rest word)))]
     ))
 
+(define (all-perms-from-dear? w)
+  (and
+   (member (list "d" "e" "a" "r") w)
+   (member (list "e" "d" "a" "r") w)
+   (member (list "e" "a" "d" "r") w)
+   (member (list "e" "a" "r" "d") w)
+   (member (list "d" "a" "e" "r") w)
+   (member (list "a" "d" "e" "r") w)
+   (member (list "a" "e" "d" "r") w)
+   (member (list "a" "e" "r" "d") w)
+   (member (list "d" "a" "r" "e") w)
+   (member (list "a" "d" "r" "e") w)
+   (member (list "a" "r" "d" "e") w)
+   (member (list "a" "r" "e" "d") w)
+   (member (list "d" "e" "r" "a") w)
+   (member (list "e" "d" "r" "a") w)
+   (member (list "e" "r" "d" "a") w)
+   (member (list "e" "r" "a" "d") w)
+   (member (list "d" "r" "e" "a") w)
+   (member (list "r" "d" "e" "a") w)
+   (member (list "r" "e" "d" "a") w)
+   (member (list "r" "e" "a" "d") w)
+   (member (list "d" "r" "a" "e") w)
+   (member (list "r" "d" "a" "e") w)
+   (member (list "r" "a" "d" "e") w)
+   (member (list "r" "a" "e" "d") w)))
+
+(check-satisfied (arrangements (list "d" "e" "a" "r")) all-perms-from-dear?)
+
 ; String -> Word
 ; converts s to the chosen word representation 
 (define (string->word s)
@@ -123,7 +152,6 @@
 (check-expect (words->strings (list (list "h" "e" "l" "l" "o") (list "w" "o" "r" "l" "d")))
               (list "hello" "world"))
 
-
 ; String List-of-strings -> Boolean
 (define (word-in-dict w los)
   (if (empty? los) #false
@@ -148,13 +176,13 @@
 (check-expect (in-dictionary (list "zoom" "zoooooom")) (list "zoom"))
 
 ;; version that use the member function
-(define (in-dictionary_v2 los)
-  (if (empty? los) (list)
-      (if (member (first los) DICT)
-          (cons (first los) (in-dictionary_v2 (rest los)))
-          (in-dictionary_v2 (rest los))
-          )
-      ))
+      (define (in-dictionary_v2 los)
+        (if (empty? los) (list)
+            (if (member (first los) DICT)
+                (cons (first los) (in-dictionary_v2 (rest los)))
+                (in-dictionary_v2 (rest los))
+                )
+            ))
 
 (check-expect (in-dictionary_v2 (list "zoom" "zoooooom")) (list "zoom"))
 

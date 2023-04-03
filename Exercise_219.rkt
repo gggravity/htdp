@@ -53,10 +53,10 @@
                     (make-posn (/ WIDTH 2) (/ HEIGHT 2))
                     "START"
                     (list
-                     (make-posn (/ WIDTH 2) (/ HEIGHT 2))
+                     (make-posn 0 0)
                      )
                     0
-                    (food-create (make-posn (/ WIDTH 2) (/ HEIGHT 2)))
+                    (food-create (make-posn 0 0))
                     0
                     ))
 
@@ -86,9 +86,9 @@
 (define (worm-eat ws)
   (make-worm (move-head (worm-head ws) (worm-dir ws))
              (worm-dir ws)
-             (move-tail (worm-head ws) (append (worm-tail ws) (list (make-posn 10 10))))
+             (move-tail (worm-head ws) (append (worm-tail ws) (list (make-posn 0 0))))
              (if (string=? (worm-dir ws) "START") 0 (add1 (worm-tocks ws)))
-             (food-create (make-posn (/ WIDTH 2) (/ HEIGHT 2)))
+             (food-create (make-posn 0 0))
              (add1 (worm-score ws))
              ))
 

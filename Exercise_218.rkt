@@ -33,6 +33,10 @@
 ;; START (no movement, used for the start position)
 ;;
 ;; tail is a list of posn
+;;
+;; tocks is the amount of tocks since start
+
+
 
 (define WORM-START (make-worm
                     (make-posn (/ WIDTH 2) (/ HEIGHT 2))

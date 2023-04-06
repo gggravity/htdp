@@ -31,4 +31,5 @@
 (define (image*2 l)
   (fold2 place-dot emt l))
 
-(check-expect (image*2 list2) (image* list2))
+(check-expect (image* list2) (image*2 list2))
+

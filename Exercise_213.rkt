@@ -1,4 +1,4 @@
-;; The first three lines of this file were inserted by DrRacket. They record metadata
+g;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname rkt) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
 
@@ -6,7 +6,7 @@
 
 (define DICT (read-lines "/usr/share/dict/words"))
 
-; List-of-strings -> Boolean
+					; List-of-strings -> Boolean
 (define (all-words-from-rat? w)
   (and
    (member? "rat" w) (member? "art" w) (member? "tar" w)))

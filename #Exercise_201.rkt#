@@ -19,7 +19,7 @@
 (define track2 (create-track "Sing along" "Jane Doe" "Rythems" 90 12 date2 123 date1))
 
 (define (total-time lot)
-  (if (empqty? lot) 0
+  (if (empty? lot) 0
       (+ (track-time (first lot))
          (total-time (rest lot)))
       ))

@@ -9,7 +9,7 @@
                 (if (= n i)
                     (cons 1 (make-row i (sub1 n)))
                     (cons 0 (make-row i (sub1 n)))
-                    )))
+                   )))
           (define (make-table i n)
             (if (= i 0) '()
                 (cons (make-row i n) (make-table (sub1 i) n))

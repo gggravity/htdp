@@ -26,7 +26,7 @@
       (tab-sqrt (sub1 n)))]))
 
 (define (tabulate r n)
-  (if (= n 0) (list (sqrt 0))
+  (if (= n 0) (list (r 0))
       (cons (r n) (tabulate r (sub1 n)))))
 
 (define (tabulate-sqrt n)

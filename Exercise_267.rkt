@@ -21,10 +21,37 @@
 
 (define (convert-usd-eur loc)
   (local ((define (usd-eur amount)
-            (* amount 1.06)))
+            (* amount 1.06))
+          )
     (map usd-eur loc)))
 
-(define l (build-list 10 add1))
+(define l1 (build-list 10 add1))
 
+(check-expect (convert-usd-eur l1) '(1.06 2.12 3.18 4.24 5.3 6.36 7.42 8.48 9.54 10.6))
 
-(check-expect (convert-usd-eur l) '(1.06 2.12 3.18 4.24 5.3 6.36 7.42 8.48 9.54 10.6))
+(define (fahrenheit-to-celsius lod)
+  (local  (
+           ;; Number -> Number
+           ;; convert a F degree into a C degree
+           (define (f-to-c degree)
+             (* (- degree 32) 5/9))
+           )
+    (map f-to-c lod)))
+
+(define l2 (build-list 5 add1))
+
+(check-expect (fahrenheit-to-celsius l2) '(-155/9 -50/3 -145/9 -140/9 -15))
+
+(define (translate lop)
+  (local (
+          (define (convert-posn-to-pair p)
+            (list (posn-x p) (posn-y p)))
+          )
+    (map convert-posn-to-pair lop)))
+
+(define l3
+  (list
+   (make-posn 1 2) (make-posn 3 4) (make-posn 5 6) (make-posn 7 8) (make-posn 9 10)))
+
+(check-expect (translate l3) '((1 2) (3 4) (5 6) (7 8) (9 10)))
+

@@ -43,6 +43,24 @@
 
 (foldr beside-align-top empty-image ellipses-beside)
 
-(foldr above empty-image ellipses-above)
+(check-expect (foldr beside-align-top empty-image ellipses-beside)
+              (beside/align
+               "top" (ellipse 20 70 "solid" "gray")
+               (beside/align
+                "top" (ellipse 20 50 "solid" "darkgray")
+                (beside/align
+                 "top" (ellipse 20 30 "solid" "dimgray")
+                 (beside/align
+                  "top" (ellipse 20 10 "solid" "black")
+                  empty-image)))))
 
-
+(check-expect (foldr above empty-image ellipses-above)
+              (above
+               (ellipse 70 20 "solid" "gray")
+               (above
+                (ellipse 50 20 "solid" "darkgray")
+                (above
+                 (ellipse 30 20 "solid" "dimgray")
+                 (above
+                  (ellipse 10 20 "solid" "black")
+                  empty-image)))))

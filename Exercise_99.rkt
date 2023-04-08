@@ -172,5 +172,5 @@
 ;; run the main loop
 ;; (main AIM1)
 ;; (main FIRED1)
-(main FIRED2)
-;; (main FIRED3)
+;; (main FIRED2)
+(main FIRED3)

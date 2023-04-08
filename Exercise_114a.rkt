@@ -213,7 +213,7 @@
             ))
 
 ;; run the main loop
-;; (main START)
+(main START)
 ;; (main AIM1)
 ;; (main FIRED1)
 ;; (main FIRED2)

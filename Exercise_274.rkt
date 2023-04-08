@@ -63,7 +63,7 @@
 
 (check-expect (prefixes2 (list)) (list))
 (check-expect (prefixes2 (list "a")) (list (list "a")))
-(check-expect (prefixes2 (list "a" "b" "c" "d")) 
+(check-expect (prefixes2 (list "a" "b" "c" "d"))
               (list (list "a" "b" "c" "d")
                     (list "a" "b" "c")
                     (list "a" "b")

@@ -1,0 +1,37 @@
+Exercise_145.rkt:(define (sorted>? l)
+Exercise_145.rkt:      (sorted>? (rest l))
+Exercise_145.rkt:(check-expect (sorted>? (cons 1 '())) #true)
+Exercise_145.rkt:(check-expect (sorted>? (cons 5 (cons 4 (cons 3 (cons 2 (cons 1 '())))))) #true)
+Exercise_145.rkt:(check-expect (sorted>? (cons 1 (cons 2 (cons 3 (cons 4 (cons 5 '())))))) #false)
+Exercise_186.rkt:(define (sorted? l)
+Exercise_186.rkt:      (sorted? (rest l))
+Exercise_186.rkt:;; produces a sorted version of alon
+Exercise_186.rkt:(check-satisfied (sort> (list 3 2 1)) sorted?)
+Exercise_186.rkt:(check-satisfied (sort> (list 1 2 3)) sorted?)
+Exercise_186.rkt:(check-satisfied (sort> (list 12 20 -5)) sorted?)
+Exercise_186.rkt:;; inserts n into the sorted list of numbers alon
+Exercise_186.rkt:;; produces a sorted version of l
+Exercise_186.rkt:(check-satisfied (sort>/bad (list 1 2 3)) sorted?) ; always true
+Exercise_187.rkt:;; produces a sorted version of l
+Exercise_187.rkt:;; inserts n into the sorted list of gp l
+Exercise_188.rkt:;; produces a list sorted by from
+Exercise_188.rkt:;; produces a list sorted by from
+Exercise_188.rkt:;; inserts n into the sorted list of emails l
+Exercise_188.rkt:;; inserts n into the sorted list of emails l
+Exercise_189.rkt:;; produces a list sorted by from
+Exercise_189.rkt:;; produces a list sorted by from
+Exercise_189.rkt:;; inserts n into the sorted list of emails l
+Exercise_189.rkt:;; inserts n into the sorted list of emails l
+Exercise_189.rkt:(define (search-sorted n alon)
+Exercise_189.rkt:(search-sorted 2 (list 1 2 3 4 5 6))
+Exercise_197.rkt:;; inserts n into the sorted list of letter-counts l
+Exercise_197.rkt:;; produces a list sorted letter-counts by count
+Exercise_198.rkt:;; inserts n into the sorted list of letter-counts l
+Exercise_198.rkt:;; produces a list sorted letter-counts by count
+Exercise_275.rkt:;; produces a list sorted letter-counts by count
+Exercise_292.rkt:(define (sorted cmp)
+Exercise_292.rkt:; determines whether l is sorted according to cmp
+Exercise_292.rkt:(define (sorted? cmp l)
+Exercise_292.rkt:       (sorted? cmp (rest l)))))
+Exercise_292.rkt:(check-expect (sorted? < '(1 2 3)) #true)
+Exercise_292.rkt:(check-expect (sorted? < '(2 1 3)) #false)

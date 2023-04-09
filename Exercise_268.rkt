@@ -10,13 +10,31 @@
          (* 0.9291 fx))
        fx-list))
 
-(convert-euro '(10 100 200 333 3000 10000))
+(check-expect (convert-euro '(10 100 200 333 3000 10000))
+              '(9.291 92.91 185.82 309.3903 2787.3 9291))
 
 ;; List-of-numbers -> List-of-numbers
 ;; convert a list of F degrees into a list C degrees
 (define (convertFC degrees)
   (map (λ (degree)
-         (exact->inexact (* (- degree 32) 5/9))
+         (* (- degree 32) 5/9)
          ) degrees))
 
-(convertFC '(100 0 50 150 200))
+(check-expect (convertFC '(100 0 50 150 200))
+              '(340/9 -160/9 10 590/9 280/3))
+
+
+(define (translate lop)
+  (map (λ (p) (list (posn-x p) (posn-y p))) lop))
+
+(check-expect (translate (list (make-posn 1 2)
+                               (make-posn 3 4)
+                               (make-posn 5 6)
+                               (make-posn 7 8)
+                               (make-posn 9 10)))
+              '((1 2)
+                (3 4)
+                (5 6)
+                (7 8)
+                (9 10)))
+

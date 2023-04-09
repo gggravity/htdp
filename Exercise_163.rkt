@@ -2,7 +2,6 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname ex063) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 
-
 ;; Number -> Number
 ;; convert a F degree into a C degree
 (define (f-to-c degree)

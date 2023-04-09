@@ -2,39 +2,56 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname rkt) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
 
-;; List-of-numbers -> List-of-numbers
-;; converts a list of dollers into a list of euros
-;
-(define (convert-euro fx-list)
-  (map (λ (fx)
-         (* 0.9291 fx))
-       fx-list))
+;; (define DOT (circle 5 "solid" "red"))
+;; (define MT-SCENE (empty-scene 100 100))
 
-(check-expect (convert-euro '(10 100 200 333 3000 10000))
-              '(9.291 92.91 185.82 309.3903 2787.3 9291))
+;; (define (dots lop)
+;;   (local (
+;;           ; Posn Image -> Image 
+;;           ; adds a DOT at p to scene
+;;           (define (add-one-dot p scene)
+;;             (place-image DOT (posn-x p) (posn-y p) scene)))
 
-;; List-of-numbers -> List-of-numbers
-;; convert a list of F degrees into a list C degrees
-(define (convertFC degrees)
-  (map (λ (degree)
-         (* (- degree 32) 5/9)
-         ) degrees))
+;;     (foldr add-one-dot MT-SCENE lop)))
 
-(check-expect (convertFC '(100 0 50 150 200))
-              '(340/9 -160/9 10 590/9 280/3))
+;; (define l1 (list (make-posn 10 10) (make-posn 20 20) (make-posn 30 30) (make-posn 40 40)))
 
+;; (dots l1)
+
+
+(define (convert-usd-eur loc)
+  (local ((define (usd-eur amount)
+            (* amount 1.06))
+          )
+    (map usd-eur loc)))
+
+(define l1 (build-list 10 add1))
+
+(check-expect (convert-usd-eur l1) '(1.06 2.12 3.18 4.24 5.3 6.36 7.42 8.48 9.54 10.6))
+
+(define (fahrenheit-to-celsius lod)
+  (local  (
+           ;; Number -> Number
+           ;; convert a F degree into a C degree
+           (define (f-to-c degree)
+             (* (- degree 32) 5/9))
+           )
+    (map f-to-c lod)))
+
+(define l2 (build-list 5 add1))
+
+(check-expect (fahrenheit-to-celsius l2) '(-155/9 -50/3 -145/9 -140/9 -15))
 
 (define (translate lop)
-  (map (λ (p) (list (posn-x p) (posn-y p))) lop))
+  (local (
+          (define (convert-posn-to-pair p)
+            (list (posn-x p) (posn-y p)))
+          )
+    (map convert-posn-to-pair lop)))
 
-(check-expect (translate (list (make-posn 1 2)
-                               (make-posn 3 4)
-                               (make-posn 5 6)
-                               (make-posn 7 8)
-                               (make-posn 9 10)))
-              '((1 2)
-                (3 4)
-                (5 6)
-                (7 8)
-                (9 10)))
+(define l3
+  (list
+   (make-posn 1 2) (make-posn 3 4) (make-posn 5 6) (make-posn 7 8) (make-posn 9 10)))
+
+(check-expect (translate l3) '((1 2) (3 4) (5 6) (7 8) (9 10)))
 

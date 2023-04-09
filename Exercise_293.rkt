@@ -33,8 +33,9 @@
 
 
 
-(define (found? cmp)
-  (equal? (found-another-way? 9 l1) cmp))
+(define (found? n l)
+  (λ (cmp)
+    (equal? (found-another-way? n l) cmp)))
 
 ;; (sublist (find-index 0 9 l1) l1)
 (check-expect (found-another-way? 9 l1) '(9 5 8 4 0 1 4))
@@ -45,7 +46,7 @@
 (check-expect (find 3 l1) (found-another-way? 3 l1))
 (check-expect (find 6 l1) (found-another-way? 6 l1))
 
-(check-satisfied (find 9 l1) found?)
-;; (check-satisfied (find 3 l1) found?)
-;; (check-satisfied (find 6 l1) found?)
+(check-satisfied (find 9 l1) (found? 9 l1))
+(check-satisfied (find 3 l1) (found? 3 l1))
+(check-satisfied (find 6 l1) (found? 6 l1))
 

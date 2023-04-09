@@ -2,34 +2,21 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname rkt) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
 
-(define-struct inventory [name desc acq-price sales-price])
+;; List-of-numbers -> List-of-numbers
+;; converts a list of dollers into a list of euros
+;
+(define (convert-euro fx-list)
+  (map (λ (fx)
+         (* 0.9291 fx))
+       fx-list))
 
-(define inventory-list (list (make-inventory "item-1" "item-1" 101 120)
-                             (make-inventory "item-2" "item-2" 12 66)
-                             (make-inventory "item-3" "item-3" 19 9)
-                             (make-inventory "item-4" "item-4" 14 16)
-                             (make-inventory "item-5" "item-5" 40 120)
-                             (make-inventory "item-6" "item-6" 10 12)
-                             (make-inventory "item-7" "item-7" 120 121)
-                             ))
+(convert-euro '(10 100 200 333 3000 10000))
 
-(define (sort-profit loi)
-  (local (
-          (define (profit item)
-            (- (inventory-sales-price item) (inventory-acq-price item)))
+;; List-of-numbers -> List-of-numbers
+;; convert a list of F degrees into a list C degrees
+(define (convertFC degrees)
+  (map (λ (degree)
+         (exact->inexact (* (- degree 32) 5/9))
+         ) degrees))
 
-          (define (cmp a b)
-            (> (profit a) (profit b)))
-          )
-    (sort loi cmp)
-    ))
-
-(check-expect (sort-profit inventory-list)
-              (list (make-inventory "item-5" "item-5" 40 120)
-                    (make-inventory "item-2" "item-2" 12 66)
-                    (make-inventory "item-1" "item-1" 101 120)
-                    (make-inventory "item-4" "item-4" 14 16)
-                    (make-inventory "item-6" "item-6" 10 12)
-                    (make-inventory "item-7" "item-7" 120 121)
-                    (make-inventory "item-3" "item-3" 19 9)))
-
+(convertFC '(100 0 50 150 200))

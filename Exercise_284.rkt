@@ -2,9 +2,13 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname rkt) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
 
+(map (λ (x) (* 10 x)) '(1 2 3))
 
-((λ (x) x) (λ (x) x))
+(foldl (λ (name rst) (string-append name ", " rst)) "etc." '("Matthew" "Robby"))
 
-((λ (x) (x x)) (λ (x) x))
+(define-struct ir [name price])
 
-((λ (x) (x x)) (λ (x) (x x)))
+(define th 20)
+(filter (λ (ir) (<= (ir-price ir) th))
+        (list (make-ir "bear" 10)
+              (make-ir "doll" 33)))

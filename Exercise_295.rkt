@@ -27,3 +27,10 @@
 
 (check-satisfied (random-posns 3)
                  (n-inside-playground? 3))
+
+(define (random-posns/bad n)
+  (build-list n (λ (i) (make-posn (+ (random WIDTH) WIDTH)
+                                  (+ (random HEIGHT) HEIGHT)))))
+
+(check-satisfied (random-posns/bad 10)
+                 (n-inside-playground? 10))

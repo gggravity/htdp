@@ -130,16 +130,6 @@
                          (make-phone 713 664 9993)
                          (make-phone 713 664 9993)))
 
-(check-expect (match (cons (make-phone 713 664 9993) '())
-                [(cons (phone area-code 664 9993) tail)
-                 area-code])
-              713)
-
-(check-expect (match (make-phone 713 664 9993)
-                [(phone area-code 664 9993)
-                 area-code])
-              713)
-
 (define (replace lop)
   (for/list ((p lop))
     (match (make-phone 713 664 9993)

@@ -36,40 +36,35 @@
 
 (define (blue-eyed-child? an-ftree)
   (cond
-   [(no-parent? an-ftree) #false]
-   [else (or (string=? (child-eyes an-ftree) "blue")
-             (blue-eyed-child? (child-father an-ftree))
-             (blue-eyed-child? (child-mother an-ftree)))]))
+    [(no-parent? an-ftree) #false]
+    [else (or (string=? (child-eyes an-ftree) "blue")
+              (blue-eyed-child? (child-father an-ftree))
+              (blue-eyed-child? (child-mother an-ftree)))]))
 
 (check-expect (blue-eyed-child? Carl) #false)
 (check-expect (blue-eyed-child? Gustav) #true)
 
-(define (count-persons an-ftree)
+(define ff1 (list Carl Bettina))
+(define ff2 (list Fred Eva))
+(define ff3 (list Fred Eva Carl))
+
+; FF -> Boolean
+; does the forest contain any child with "blue" eyes
+
+(check-expect (blue-eyed-child-in-forest? ff1) #false)
+(check-expect (blue-eyed-child-in-forest? ff2) #true)
+(check-expect (blue-eyed-child-in-forest? ff3) #true)
+
+(define (blue-eyed-child-in-forest? a-forest)
   (cond
-    [(no-parent? an-ftree) 0]
-    [else (+ 1
-             (count-persons (child-father an-ftree))
-             (count-persons (child-mother an-ftree)))]))
+    [(empty? a-forest) #false]
+    [else
+     (or (blue-eyed-child? (first a-forest))
+         (blue-eyed-child-in-forest? (rest a-forest)))]))
 
-(check-expect (count-persons Carl) 1)
-(check-expect (count-persons Bettina) 1)
-(check-expect (count-persons Adam) 3)
-(check-expect (count-persons Dave) 3)
-(check-expect (count-persons Eva) 3)
-(check-expect (count-persons Fred) 1)
-(check-expect (count-persons Gustav) 5)
+(define (blue-eyed-child-in-forest2? forest)
+  (ormap blue-eyed-child? forest))
 
-(define (count-tree tree)
-  (match tree
-    [(no-parent) 0]
-    [(child f m n d e) (+ 1 (count-tree f) (count-tree m))]))
-
-(check-expect (count-persons Carl) (count-tree Carl))
-(check-expect (count-persons Bettina) (count-tree Bettina))
-(check-expect (count-persons Adam) (count-tree Adam))
-(check-expect (count-persons Dave) (count-tree Dave))
-(check-expect (count-persons Eva) (count-tree Eva))
-(check-expect (count-persons Fred) (count-tree Fred))
-(check-expect (count-persons Gustav) (count-tree Gustav))
-
-
+(check-expect (blue-eyed-child-in-forest2? ff1) #false)
+(check-expect (blue-eyed-child-in-forest2? ff2) #true)
+(check-expect (blue-eyed-child-in-forest2? ff3) #true)

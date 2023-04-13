@@ -14,59 +14,6 @@
       (string? value)
       (symbol? value)))
 
-(define b 123)
-
-(check-expect (atom? 123) #true)
-(check-expect (atom? "hello world") #true)
-(check-expect (atom? 'a) #true)
-(check-expect (atom? b) #true)
-(check-expect (atom? '(1 2 3)) #false)
-(check-expect (atom? '("hello" "world")) #false)
-
-;; ; S-expr Symbol -> N 
-;; ; counts all occurrences of sy in sexp 
-;; (define (count sexp sy)
-;;   (cond
-;;     [(atom? sexp) (count-atom sexp sy)]
-;;     [else (count-sl sexp sy)]))
-
-;; ; SL Symbol -> N 
-;; ; counts all occurrences of sy in sl 
-;; (define (count-sl sl sy)
-;;   (cond
-;;     [(empty? sl) 0]
-;;     [else
-;;      (+ (count (first sl) sy) (count-sl (rest sl) sy))]))
-
-;; ; Atom Symbol -> N 
-;; ; counts all occurrences of sy in at 
-;; (define (count-atom at sy)
-;;   (cond
-;;     [(number? at) 0]
-;;     [(string? at) 0]
-;;     [(symbol? at) (if (symbol=? at sy) 1 0)]))
-
-
-
-(define (count sexp sy)
-  (local ((define (count-sl sl)
-            (cond
-               [(empty? sl) 0]
-               [else
-                (+ (count (first sl) sy) (count-sl (rest sl)))]))
-          (define (count-atom at)
-            (cond
-              [(number? at) 0]
-              [(string? at) 0]
-              [(symbol? at) (if (symbol=? at sy) 1 0)])))
-    (cond
-      [(atom? sexp) (count-atom sexp)]
-      [else (count-sl sexp)])))
-
-(check-expect (count '(a b c c e (a c c b)) 'c) 4)
-(check-expect (count '(a a a a a) 'c) 0)
-
-
 (define (depth list-of-sexp)
   (local ((define (count-sl sl)
             (cond

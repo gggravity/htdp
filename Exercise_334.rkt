@@ -8,16 +8,6 @@
 
 (define-struct dir [name readability content])
 
-;; A Dir.v2 is a structure: 
-;; (make-dir String LOFD)
-
-;; An LOFD (short for list of files and directories) is one of:
-;; – '()
-;; – (cons File.v2 LOFD)
-;; – (cons Dir.v2 LOFD)
-
-;; A File.v2 is a String. 
-
 (define d1
   (make-dir "TS" #true
             (list

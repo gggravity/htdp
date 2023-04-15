@@ -24,9 +24,35 @@
 
 (define TS-files (list (make-file "read!" 10 "")))
 
-
 (define d1
   (make-dir "TS" (list (make-dir "Text" '() Text-files)
                        (make-dir "Libs" (list (make-dir "Code" '() Code-files)
 					      (make-dir "Docs" '() Docs-files)) '()))
 	    TS-files))
+
+
+(define (how-many-list dir)
+  (for/list ([d (dir-dirs dir)])
+    (cons (dir-name d) (cons (string-append "Files: " (number->string (length (dir-files d))))
+                             (how-many-list d)))))
+
+(check-expect (how-many-list d1)
+              '(("Text" "Files: 3") ("Libs" "Files: 0" ("Code" "Files: 2") ("Docs" "Files: 1"))))
+
+
+(define (how-many dir)
+  (+
+   (for/sum ([d (dir-dirs dir)])
+     (how-many d))
+   (length (dir-files dir))))
+
+(check-expect (how-many d1) 7)
+
+;; (define (dir-size-total dir)
+;;   (local ((define (d-size d)
+;;             (for/list ([f d])
+;;               (if (file? f) (file-size f)
+;;                   (d-size (dir-content f))))))
+;;     (d-size (dir-content dir))))
+
+;; (check-expect (dir-size-total d1) '((99 52 17) 10 ((8 2) (19))))

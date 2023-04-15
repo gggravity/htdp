@@ -31,28 +31,26 @@
 	    TS-files))
 
 
-(define (how-many-list dir)
-  (for/list ([d (dir-dirs dir)])
-    (cons (dir-name d) (cons (string-append "Files: " (number->string (length (dir-files d))))
-                             (how-many-list d)))))
+(define (how-many-text dir)
+  (local ((define (append-count d)
+            (string-append "Files: " (number->string (length (dir-files d)))))
+          (define (walk-dirs dir)
+            (for/list ([d (dir-dirs dir)])
+              (cons (dir-name d) (cons (append-count d) (walk-dirs d))))))
+    (cons (dir-name dir) (cons (append-count dir) (walk-dirs dir)))))
 
-(check-expect (how-many-list d1)
-              '(("Text" "Files: 3") ("Libs" "Files: 0" ("Code" "Files: 2") ("Docs" "Files: 1"))))
-
+(check-expect (how-many-text d1) '("TS" "Files: 1"
+                                        ("Text" "Files: 3")
+                                        ("Libs" "Files: 0"
+                                               ("Code" "Files: 2")
+                                               ("Docs" "Files: 1"))))
 
 (define (how-many dir)
-  (+
-   (for/sum ([d (dir-dirs dir)])
-     (how-many d))
-   (length (dir-files dir))))
+  (local ((define (count d)
+            (length (dir-files d)))
+          (define (walk-dirs dir)
+            (for/sum ([d (dir-dirs dir)])
+              (+ (count d) (walk-dirs d)))))
+    (+ (count dir) (walk-dirs dir))))
 
 (check-expect (how-many d1) 7)
-
-;; (define (dir-size-total dir)
-;;   (local ((define (d-size d)
-;;             (for/list ([f d])
-;;               (if (file? f) (file-size f)
-;;                   (d-size (dir-content f))))))
-;;     (d-size (dir-content dir))))
-
-;; (check-expect (dir-size-total d1) '((99 52 17) 10 ((8 2) (19))))

@@ -16,9 +16,8 @@
 
 ; A File.v2 is a String. 
 
-(define d
-  '(make-dir "TS" ((make-dir "Text" '("part1" "part2" "part3"))
-                   ("read!")
-                   (make-dir "Libs" '((make-dir "Code" ("hang" "draw"))
-                                      (make-dir "Docs" ("read!")))))))
 
+(make-dir "TS" (list (make-dir "Text" '("part1" "part2" "part3"))
+                     "read!"
+                     (make-dir "Libs" (list (make-dir "Code" '("hang" "draw"))
+                                            (make-dir "Docs" '("read!"))))))

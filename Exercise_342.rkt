@@ -9,7 +9,7 @@
 ; creates a representation of the a-path directory 
 ;; (define (create-dir a-path) ...)
 
-(define L (create-dir "/var/log/")) ; on Linux
+;; (define L (create-dir "/var/log/")) ; on Linux
 
 ; A Path is [List-of String].
 ; interpretation directions into a directory tree
@@ -41,9 +41,9 @@
     (λ (d) (find? d file))
     (dir-dirs dir))))
 
-(check-expect (find? L "apport.log") #true)
-(check-expect (find? L "sa26") #true)
-(check-expect (find? L "a38") #false)
+;; (check-expect (find? L "apport.log") #true)
+;; (check-expect (find? L "sa26") #true)
+;; (check-expect (find? L "a38") #false)
 
 (define (find-sub-dir dir name)
   (local ((define contains-file?
@@ -90,3 +90,39 @@
 (check-expect (find d1 "part3") '("TS" "Text"))
 (check-expect (find d1 "read!") '("TS"))
 
+(define (find-filepath dir name)
+  (local ((define contains-file?
+            (ormap (λ (f) (string=? name (file-name f))) (dir-files dir))))
+    (if contains-file? (list (dir-name dir)) (find dir name))))
+
+(check-expect (find-filepath d1 "hang") '("TS" "Libs" "Code"))
+
+
+;; (define (find-all dir name)
+;;   (local ((define contains-file?
+;;             (ormap (λ (f) (string=? name (file-name f))) (dir-files dir)))
+;;           (define walk-dirs
+;;             (for/list ([sub-dir (dir-dirs dir)])
+;;               (dir-name sub-dir))))
+;;     (if contains-file? (list (dir-name dir)) walk-dirs)
+;;     ))
+
+;; (find-all d1 "hang")
+
+
+;; (define (find-all d f)
+;;   (local
+;;       ((define found?
+;;          (ormap (λ (file) (string=? f (file-name file))) (dir-files d)))
+
+;;        ; [List-of Dir] -> [List-of Path]
+;;        (define subpaths
+;;          (for*/list ([dir  (dir-dirs d)]
+;;                      [path (find-all dir f)])
+;;            (cons (dir-name d) path))))
+
+;;     (if (not found?)
+;;         subpaths
+;;         (cons (list (dir-name d) f) subpaths))))
+
+;; (find-all d1 "hang")

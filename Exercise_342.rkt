@@ -46,30 +46,28 @@
 (check-expect (find? L "a38") #false)
 
 (define (find-sub-dir dir name)
-  (local ((define (contains d n)
-            (ormap (λ (f) (string=? n (file-name f))) (dir-files d)))
-          (define (walk-dirs d)
-            (for/or ([sub-dir (dir-dirs d)])
+  (local ((define contains-file?
+            (ormap (λ (f) (string=? name (file-name f))) (dir-files dir)))
+          (define walk-dirs
+            (for/or ([sub-dir (dir-dirs dir)])
               (find-sub-dir sub-dir name))))
-    (if (contains dir name)
+    (if contains-file?
         (dir-name dir)
-        (walk-dirs dir))
-  ))
+        walk-dirs)))
 
 (check-expect (find-sub-dir d1 "sa26") #false)
 (check-expect (find-sub-dir d1 "read!") "TS")
 (check-expect (find-sub-dir d1 "hang") "Code")
 
 (define (find-one-up dir name)
-  (local ((define (contains d n)
-            (ormap (λ (f) (string=? n (dir-name f))) (dir-dirs d)))
-          (define (walk-dirs d)
-            (for/or ([sub-dir (dir-dirs d)])
+  (local ((define contains-dir?
+            (ormap (λ (f) (string=? name (dir-name f))) (dir-dirs dir)))
+          (define walk-dirs
+            (for/or ([sub-dir (dir-dirs dir)])
               (find-one-up sub-dir name))))
-    (if (contains dir name)
+    (if contains-dir?
         (dir-name dir)
-        (walk-dirs dir))
-    ))
+        walk-dirs)))
 
 
 (define (find-fuld-path root path dir name)
@@ -81,11 +79,11 @@
 (check-expect (find-fuld-path "TS" '("Code") d1 "Code") '("TS" "Libs" "Code"))
 
 (define (find dir name)
-  (local ((define sub-dir (find-sub-dir dir name)))
-    (if (find? dir name)
-        (find-fuld-path (dir-name dir) (list sub-dir) dir sub-dir)
-        #false
-        )))
+  (if (find? dir name)
+      (local ((define sub-dir (find-sub-dir dir name)))
+        (find-fuld-path (dir-name dir) (list sub-dir) dir sub-dir))
+      #false
+      ))
 
 (check-expect (find d1 "hang") '("TS" "Libs" "Code"))
 (check-expect (find d1 "hang!") #false)

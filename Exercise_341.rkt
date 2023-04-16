@@ -11,15 +11,32 @@
 
 (define L (create-dir "/var/log/")) ; on Linux
 
-(define (du dir)
+(define (du1 dir)
   (local ((define (all-file-size d)
-            (foldl + 0 (map (λ (f) (file-size f)) (dir-files d))))
+            (for/sum ([f (dir-files d)])
+              (file-size f)))
           (define (walk-dirs dir)
             (for/sum ([d (dir-dirs dir)])
-              (+ 1 (all-file-size d) (walk-dirs d)))))
-    (walk-dirs dir)))
+              (+ 1 (du1 d)))))
+    (+ (all-file-size dir)
+       (walk-dirs dir))
+    ))
 
 ;; du -b /var/log/ -> 1203022346
-(check-satisfied (/ 1203022346 (du L))
+(check-satisfied (/ 1203022346 (du1 L))
                  (λ (result) (and (< result 1.05)
                                   (> result 0.95))))
+
+(define (du2 dir)
+  (+
+   (for/sum ([f (dir-files dir)])
+     (file-size f))
+   (for/sum ([d (dir-dirs dir)])
+     (add1 (du2 d)))
+   ))
+
+(check-satisfied (/ 1203022346 (du2 L))
+                 (λ (result) (and (< result 1.05)
+                                  (> result 0.95))))
+
+(check-expect (du1 L) (du2 L))

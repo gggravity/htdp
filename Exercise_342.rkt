@@ -91,38 +91,37 @@
 (check-expect (find d1 "read!") '("TS"))
 
 (define (find-filepath dir name)
-  (local ((define contains-file?
-            (ormap (λ (f) (string=? name (file-name f))) (dir-files dir))))
-    (if contains-file? (list (dir-name dir)) (find dir name))))
+  (local ((define (find-path dir name path)
+            (local ((define contains-file?
+                      (ormap (λ (f) (string=? name (file-name f))) (dir-files dir)))
+                    (define (walk-dirs dir)
+                      (for/or ([sub-dir (dir-dirs dir)])
+                        (find-path sub-dir name (cons (dir-name sub-dir) path)))))
+              (if contains-file? path (walk-dirs dir))
+              )))
+    (reverse (find-path dir name (list (dir-name dir))))
+    ))
 
 (check-expect (find-filepath d1 "hang") '("TS" "Libs" "Code"))
 
+(define (find-all dir name)
+  (local ((define (list-dirs dir name path)
+            (local ((define contains-file?
+                      (ormap (λ (f) (string=? name (file-name f))) (dir-files dir)))
+                    (define (walk-dirs dir)
+                      (for/or ([sub-dir (dir-dirs dir)])
+                        (list-dirs sub-dir name (cons (dir-name sub-dir) path)))))
+              (if contains-file?
+                  (if (false? (walk-dirs dir)) (list path)
+                      (cons path (walk-dirs dir))
+                      )
+                  (walk-dirs dir)
+                  ))))
+    (map reverse (list-dirs dir name (list (dir-name dir))))          
+    ))
 
-;; (define (find-all dir name)
-;;   (local ((define contains-file?
-;;             (ormap (λ (f) (string=? name (file-name f))) (dir-files dir)))
-;;           (define walk-dirs
-;;             (for/list ([sub-dir (dir-dirs dir)])
-;;               (dir-name sub-dir))))
-;;     (if contains-file? (list (dir-name dir)) walk-dirs)
-;;     ))
+(find-all d1 "read!")
 
-;; (find-all d1 "hang")
+(check-expect (find-all d1 "read!") '(("TS") ("TS" "Libs" "Docs")))
 
 
-;; (define (find-all d f)
-;;   (local
-;;       ((define found?
-;;          (ormap (λ (file) (string=? f (file-name file))) (dir-files d)))
-
-;;        ; [List-of Dir] -> [List-of Path]
-;;        (define subpaths
-;;          (for*/list ([dir  (dir-dirs d)]
-;;                      [path (find-all dir f)])
-;;            (cons (dir-name d) path))))
-
-;;     (if (not found?)
-;;         subpaths
-;;         (cons (list (dir-name d) f) subpaths))))
-
-;; (find-all d1 "hang")

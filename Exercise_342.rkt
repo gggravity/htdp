@@ -112,16 +112,27 @@
                       (for/or ([sub-dir (dir-dirs dir)])
                         (list-dirs sub-dir name (cons (dir-name sub-dir) path)))))
               (if contains-file?
-                  (if (false? (walk-dirs dir)) (list path)
-                      (cons path (walk-dirs dir))
-                      )
+                  (if (false? (walk-dirs dir))
+                      (list path) (cons path (walk-dirs dir)))
                   (walk-dirs dir)
                   ))))
     (map reverse (list-dirs dir name (list (dir-name dir))))          
     ))
 
-(find-all d1 "read!")
-
 (check-expect (find-all d1 "read!") '(("TS") ("TS" "Libs" "Docs")))
 
+(define (find-all2 dir name)
+  (local
+      ((define contains-file?
+         (ormap (λ (f) (string=? name (file-name f))) (dir-files dir)))
 
+       (define walk-dirs
+         (for*/list ([d  (dir-dirs dir)]
+                     [path (find-all2 d name)])
+           (cons (dir-name dir) path))))
+
+    (if contains-file?
+        (cons (list (dir-name dir)) walk-dirs)
+        walk-dirs)))
+
+(check-expect (find-all d1 "read!") (find-all2 d1 "read!"))

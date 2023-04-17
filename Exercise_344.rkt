@@ -150,3 +150,25 @@
                           ("TS" "Libs" ())
                           ("TS" "Libs" "Code" ("hang" "draw"))
                           ("TS" "Libs" "Docs" ("read!"))))
+
+(define (find-all-344 dir name)
+  (local
+      ((define contains-file?
+         (ormap (λ (f) (string=? name (file-name f))) (dir-files dir)))
+
+       (define contains-dir?
+         (ormap (λ (d) (string=? name (dir-name d))) (dir-dirs dir)))
+
+       (define walk-dirs
+         (for*/list ([d  (dir-dirs dir)]
+                     [path (find-all-344 d name)])
+           (cons (dir-name dir) path))))
+
+    (if (or contains-file?
+            contains-dir?)
+        (cons (list (dir-name dir) name) walk-dirs)
+        walk-dirs)))
+
+(check-expect (find-all-344 d1 "read!") '(("TS" "read!") ("TS" "Libs" "Docs" "read!")))
+(check-expect (find-all-344 d1 "Code") '(("TS" "Libs" "Code")))
+(check-expect (find-all-344 d1 "hang") '(("TS" "Libs" "Code" "hang")))

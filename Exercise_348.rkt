@@ -21,7 +21,7 @@
     [(mul left right) (* (eval-expression left) (eval-expression right))]))
 
 (check-expect (eval-expression (make-add 10 -10)) 0)
-(check-expect (eval-expression (make-add -1 2)) 1)
+(check-expect (eval-expression (make-add -1 2)) 1))
 (check-expect (eval-expression (make-add (make-mul -2 -3) 33)) 39)
 (check-within (eval-expression (make-mul (make-add 1 (make-mul 2 3)) 3.14)) 21.98 0.01)
 
@@ -50,4 +50,3 @@
 (check-expect (eval-bool-expression (make-bool-or #true #false)) #true)
 (check-expect (eval-bool-expression (make-bool-not #true)) #false)
 (check-expect (eval-bool-expression (make-bool-not #false)) #true)
-

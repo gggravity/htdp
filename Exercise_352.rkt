@@ -87,8 +87,10 @@
 (define (subst ex x v)
   (match ex
     [(? number?) ex]
+    [(? symbol?) (if (symbol=? x ex) v ex)]
     [(add left right) (make-add (subst left x v) (subst right x v))]
     [(mul left right) (make-mul (subst left x v) (subst right x v))]
     ))
 
-(subst (make-add 10 'a) 'a 10)
+(check-expect (subst (make-add 10 'a) 'a 12) (make-add 10 12))
+(check-expect (subst (make-add 'a 'a) 'a 12) (make-add 12 12))

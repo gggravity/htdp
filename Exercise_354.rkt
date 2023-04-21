@@ -105,3 +105,25 @@
 
 (check-expect (numeric? (make-add 1 2)) #true)
 (check-expect (numeric? (make-add 'a 2)) #false)
+
+(define (eval-variable ex)
+  (if (numeric? ex) (eval-expression ex) (error WRONG))
+  )
+
+(check-expect (eval-variable (make-add 1 2)) 3)
+(check-error (eval-variable (make-add 'a 2)) WRONG)
+
+; An AL (short for association list) is [List-of Association].
+; An Association is a list of two items:
+;   (cons Symbol (cons Number '())).
+
+(define (eval-variable* ex da)
+  (eval-expression
+   (if (numeric? ex)
+       (error WRONG)
+       (subst ex (first da) (second da)))))
+
+(define al1 '(a 12))
+
+(check-expect (eval-variable* (make-add 10 'a) al1) 22)
+(check-expect (eval-variable* (make-mul (make-add 'a 2) 'a) al1) 168)

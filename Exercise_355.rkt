@@ -129,3 +129,18 @@
 (check-expect (eval-variable* (make-add 10 'a) al2) 22)
 (check-expect (eval-variable* (make-mul (make-add 'a 2) 'a) al2) 168)
 
+(define (eval-var-lookup ex da)
+  (match ex
+    [(? number?) ex]
+    [(? symbol?) (if (false? (assq ex da))
+                     (error WRONG)
+                     (second (assq ex da)))]
+    [(add l r) (+ (eval-var-lookup l da) (eval-var-lookup r da))]
+    [(mul l r) (* (eval-var-lookup l da) (eval-var-lookup r da))]
+    ))
+
+(check-expect (eval-var-lookup (make-add 10 'a) al2) 22)
+(check-expect (eval-var-lookup (make-add 'a 10) al2) 22)
+(check-expect (eval-var-lookup (make-mul (make-add 'a 2) 'a) al2) 168)
+(check-expect (eval-var-lookup (make-mul (make-add 'a 2) 'b) al2) 294)
+

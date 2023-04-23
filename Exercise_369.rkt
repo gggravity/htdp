@@ -79,7 +79,7 @@
 (define (find-attr loa sym)
   (match (assq sym loa)
     [#false #false]
-    [result (if (string? (second result)) (second result) #false)]))
+    [found (if (string? (second found)) (second found) #false)]))
 
 (check-expect (find-attr loa1 'initial) "red")
 (check-expect (find-attr loa1 'state) "green")

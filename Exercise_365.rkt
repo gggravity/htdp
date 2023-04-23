@@ -4,11 +4,17 @@
 
 (require 2htdp/abstraction)
 
-;; <transition from="seen-e" to="seen-f" />
+;; '(server ((name "example.org")))
 
-;; <ul><li><word /><word /></li><li><word /></li></ul>
+;; <server name="example.org">
 
+;; '(carcas (board (grass)) (player ((name "sam"))))
 
-'(transition ((from "seen-e") (to "seen-f")))
+;; <carcas>
+;; <board><grass /></board>
+;; <player name="sam" />
+;; </carcas> 
 
-'(ul (li (word) word) (li (word)))
+;; '(start)
+
+;; <start />
